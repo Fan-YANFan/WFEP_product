@@ -14,6 +14,7 @@ const features = [
   {
     title: "Sustainable shipping",
     body: "Recyclable packaging and carbon-neutral delivery on every order.",
+    link: { href: "/recycling", label: "Find HK recycling points" },
   },
 ];
 
@@ -90,6 +91,14 @@ export default function HomePage() {
               </div>
               <h3 className="mt-5 font-display text-xl font-semibold text-slate-900">{f.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate-600">{f.body}</p>
+              {"link" in f && f.link && (
+                <Link
+                  href={f.link.href}
+                  className="mt-3 inline-block text-sm font-semibold text-teal-700 hover:text-teal-900"
+                >
+                  {f.link.label} →
+                </Link>
+              )}
             </div>
           ))}
         </div>

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useCookies } from "@/context/CookieContext";
 import { COMPANY } from "@/lib/product";
 
-const legal = [
+const links = [
+  { href: "/recycling", label: "Recycling points (HK)" },
   { href: "/terms", label: "Terms & Conditions" },
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/cookies", label: "Cookie Policy" },
@@ -26,10 +27,10 @@ export function Footer() {
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Legal
+              Links
             </p>
             <ul className="mt-4 space-y-2">
-              {legal.map((item) => (
+              {links.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}

@@ -7,6 +7,7 @@ import { useState } from "react";
 const nav = [
   { href: "/", label: "Home" },
   { href: "/product", label: "Product" },
+  { href: "/recycling", label: "Recycling" },
 ];
 
 export function Header() {

@@ -21,6 +21,14 @@ Open [http://localhost:3000](http://localhost:3000).
 | `/terms` | Terms & Conditions |
 | `/privacy` | Privacy Policy |
 | `/cookies` | Cookie Policy |
+| `/recycling` | Hong Kong recyclable collection points (CSDI / EPD live API) |
+
+## Recycling data API
+
+The app proxies Hong Kong **Recyclable Collection Points Data** from [CSDI](https://portal.csdi.gov.hk/geoportal/?datasetId=epd_rcd_1630899452408_9505&lang=zh-hk) (dataset `epd_rcd_1630899452408_9505`, layer `geotagging`):
+
+- **App route:** `GET /api/recycling-points` — query params: `district`, `wasteType`, `search`, `lat`, `lng`, `radiusMeters`, `offset`, `limit`
+- **Upstream:** ArcGIS FeatureServer (`portal.csdi.gov.hk`)
 
 ## Stack
 
