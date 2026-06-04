@@ -153,3 +153,36 @@ body {
 .legal-prose a:hover {
   color: var(--color-accent-dark);
 }
+
+import './globals.css';
+import { Leaf, User } from 'lucide-react';
+import Link from 'next/link';
+
+export const metadata = {
+  title: 'EcoCycle HK | Door-to-Door Recycling',
+  description: 'Easy recycling for Hong Kong households.',
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body className="bg-slate-50 text-slate-900 antialiased">
+        <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b px-6 py-4 flex justify-between items-center">
+          <Link href="/" className="flex items-center gap-2 font-bold text-green-700 text-xl">
+            <Leaf className="w-6 h-6" /> EcoCycle HK
+          </Link>
+          <div className="flex gap-6 items-center font-medium">
+            <Link href="/" className="hover:text-green-600 transition">Home</Link>
+            <Link href="/booking" className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition">
+              Book Pickup
+            </Link>
+          </div>
+        </nav>
+        <main>{children}</main>
+        <footer className="bg-slate-900 text-slate-400 py-12 px-6 text-center text-sm">
+          <p>© 2026 EcoCycle Hong Kong. Making our city greener, one flat at a time.</p>
+        </footer>
+      </body>
+    </html>
+  );
+}

@@ -54,3 +54,42 @@ export default function HomePage() {
     </>
   );
 }
+
+import Link from 'next/link';
+import { ArrowRight, Recycle, ShieldCheck, Map } from 'lucide-react';
+
+export default function Home() {
+  return (
+    <div className="flex flex-col items-center">
+      {/* Hero Section */}
+      <section className="w-full py-20 px-6 text-center bg-gradient-to-b from-green-50 to-slate-50">
+        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
+          Recycling in HK <br /><span className="text-green-600">Simplified.</span>
+        </h1>
+        <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-10">
+          Professional door-to-door collection. We weigh it, we pay it, you save the planet.
+        </p>
+        <Link href="/booking" className="inline-flex items-center gap-2 bg-green-600 text-white px-8 py-4 rounded-xl text-lg font-bold hover:scale-105 transition-all shadow-lg shadow-green-200">
+          Start Your First Pickup <ArrowRight />
+        </Link>
+      </section>
+
+      {/* Features */}
+      <section className="grid md:grid-cols-3 gap-8 px-6 py-20 max-w-6xl">
+        <Feature icon={<Map className="text-blue-500" />} title="All 18 Districts" desc="From Central to Yuen Long, our fleet covers the whole territory." />
+        <Feature icon={<Recycle className="text-green-500" />} title="Verified Recycling" desc="We partner with Green@Community to ensure 100% material recovery." />
+        <Feature icon={<ShieldCheck className="text-purple-500" />} title="Fair Pricing" desc="Live weight-based calculation. No hidden transport fees." />
+      </section>
+    </div>
+  );
+}
+
+function Feature({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
+  return (
+    <div className="p-8 bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition">
+      <div className="mb-4">{icon}</div>
+      <h3 className="text-xl font-bold mb-2">{title}</h3>
+      <p className="text-slate-500 leading-relaxed">{desc}</p>
+    </div>
+  );
+}
