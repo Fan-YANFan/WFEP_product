@@ -3,16 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
-const nav = [
-  { href: "/", label: "Home" },
-  { href: "/product", label: "Product" },
-  { href: "/recycling", label: "Recycling" },
-];
+const nav = [{ href: "/", label: "Home" }];
 
 export function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { member, ready } = useAuth();
+
+  const authHref = member ? "/account" : "/login";
+  const authLabel = member ? "My Account" : "Log In / Sign In";
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/80 glass">
@@ -40,12 +41,14 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <Link
-            href="/product"
-            className="ml-2 rounded-full bg-teal-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-teal-700"
-          >
-            Shop now
-          </Link>
+          {ready && (
+            <Link
+              href={authHref}
+              className="ml-2 rounded-full bg-teal-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-teal-700"
+            >
+              {authLabel}
+            </Link>
+          )}
         </nav>
 
         <button
@@ -76,13 +79,15 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <Link
-            href="/product"
-            className="mt-2 block rounded-full bg-teal-600 px-3 py-2.5 text-center text-sm font-semibold text-white hover:bg-teal-700"
-            onClick={() => setMenuOpen(false)}
-          >
-            Shop now
-          </Link>
+          {ready && (
+            <Link
+              href={authHref}
+              className="mt-2 block rounded-full bg-teal-600 px-3 py-2.5 text-center text-sm font-semibold text-white hover:bg-teal-700"
+              onClick={() => setMenuOpen(false)}
+            >
+              {authLabel}
+            </Link>
+          )}
         </nav>
       )}
     </header>

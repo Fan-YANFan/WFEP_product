@@ -14,7 +14,7 @@ function CartRedirect() {
     const qty = Math.max(1, parseInt(params.get("qty") || "1", 10));
     const subscribe = params.get("subscribe") === "true";
     addToCart(qty, subscribe);
-    router.replace("/product");
+    router.replace("/");
   }, [params, addToCart, router]);
 
   return null;

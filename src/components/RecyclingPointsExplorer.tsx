@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import { HK_DISTRICTS, WASTE_TYPE_FILTERS } from "@/lib/csdi/constants";
 import {
   formatDistrictLabel,
@@ -25,6 +26,7 @@ const PAGE_SIZE = 25;
 const NEARBY_RADIUS_M = 2000;
 
 export function RecyclingPointsExplorer() {
+  const { member, addBookmark, removeBookmark, isBookmarked } = useAuth();
   const [locale, setLocale] = useState<AddressLocale>("en");
   const [district, setDistrict] = useState("");
   const [wasteType, setWasteType] = useState("");
@@ -260,20 +262,44 @@ export function RecyclingPointsExplorer() {
 
       <ul className="grid gap-4 sm:grid-cols-2">
         {!loading &&
-          data?.points.map((point) => (
+          data?.points.map((point) => {
+            const address = getAddress(point, locale);
+            const bookmarked = isBookmarked(point.cp_id);
+
+            return (
             <li
               key={point.cp_id}
               className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:shadow-md"
             >
               <div className="flex items-start justify-between gap-2">
                 <p className="font-display text-base font-semibold text-slate-900 leading-snug">
-                  {getAddress(point, locale)}
+                  {address}
                 </p>
-                {point.cp_state && (
-                  <span className="shrink-0 rounded-full bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-800">
-                    {point.cp_state}
-                  </span>
-                )}
+                <div className="flex shrink-0 items-center gap-2">
+                  {member && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        bookmarked
+                          ? removeBookmark(point.cp_id)
+                          : addBookmark(point, address)
+                      }
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
+                        bookmarked
+                          ? "bg-teal-100 text-teal-800"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                      title={bookmarked ? "Remove bookmark" : "Save to my account"}
+                    >
+                      {bookmarked ? "Saved" : "Save"}
+                    </button>
+                  )}
+                  {point.cp_state && (
+                    <span className="rounded-full bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-800">
+                      {point.cp_state}
+                    </span>
+                  )}
+                </div>
               </div>
               {point.district_id && (
                 <p className="mt-1 text-xs text-slate-500">{formatDistrictLabel(point.district_id)}</p>
@@ -327,7 +353,8 @@ export function RecyclingPointsExplorer() {
                 </span>
               </div>
             </li>
-          ))}
+            );
+          })}
       </ul>
 
       {loading && (

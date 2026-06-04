@@ -5,7 +5,7 @@ import { useCookies } from "@/context/CookieContext";
 import { COMPANY } from "@/lib/product";
 
 const links = [
-  { href: "/recycling", label: "Recycling points (HK)" },
+  { href: "/", label: "Recycling points (HK)" },
   { href: "/terms", label: "Terms & Conditions" },
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/cookies", label: "Cookie Policy" },
