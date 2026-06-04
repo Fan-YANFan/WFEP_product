@@ -54,11 +54,11 @@ type AuthContextValue = {
   addOrder: (order: Omit<MemberOrder, "id">) => void;
 };
 
-const SESSION_KEY = "wfep-member-session";
-const ACCOUNTS_KEY = "wfep-member-accounts";
-const ORDERS_KEY = "wfep-member-orders";
-const BOOKMARKS_KEY = "wfep-member-bookmarks";
-const REMINDERS_KEY = "wfep-member-reminders";
+const SESSION_KEY = "collectiv-member-session";
+const ACCOUNTS_KEY = "collectiv-member-accounts";
+const ORDERS_KEY = "collectiv-member-orders";
+const BOOKMARKS_KEY = "collectiv-member-bookmarks";
+const REMINDERS_KEY = "collectiv-member-reminders";
 
 type StoredAccounts = Record<string, string>;
 

@@ -19,10 +19,10 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <p className="font-display text-xl font-semibold text-white">WFEP Wellness</p>
+            <p className="font-display text-xl font-semibold text-white">Collectiv</p>
             <p className="mt-3 text-sm leading-relaxed text-slate-400">
-              Science-backed formulations for modern wellbeing. Always consult a healthcare
-              professional before starting any supplement regimen.
+              Find recycling points across Hong Kong, save favourites, and stay on top of local
+              collection events — together for a cleaner city.
             </p>
           </div>
           <div>
@@ -70,8 +70,7 @@ export function Footer() {
         <div className="mt-12 flex flex-col gap-2 border-t border-slate-800 pt-8 text-xs text-slate-500 sm:flex-row sm:justify-between">
           <p>© {new Date().getFullYear()} {COMPANY.name}. All rights reserved.</p>
           <p>
-            These statements have not been evaluated by the FDA. This product is not intended
-            to diagnose, treat, cure, or prevent any disease.
+            Recycling point data is provided by third-party open-data sources and may change without notice.
           </p>
         </div>
       </div>

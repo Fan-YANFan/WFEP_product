@@ -64,7 +64,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+              className="input-brand mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm"
             />
           </div>
           <div>
@@ -79,7 +79,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+              className="input-brand mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm"
             />
           </div>
 
@@ -90,7 +90,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-full bg-teal-600 py-3 text-sm font-semibold text-white transition hover:bg-teal-700 disabled:opacity-60"
+            className="btn-primary w-full rounded-full py-3 text-sm disabled:opacity-60"
           >
             {submitting ? "Please wait…" : mode === "login" ? "Log In" : "Create account"}
           </button>
@@ -106,7 +106,7 @@ export default function LoginPage() {
                   setMode("signup");
                   setError(null);
                 }}
-                className="font-semibold text-teal-700 hover:text-teal-900"
+                className="link-brand font-semibold"
               >
                 Sign Up
               </button>
@@ -120,7 +120,7 @@ export default function LoginPage() {
                   setMode("login");
                   setError(null);
                 }}
-                className="font-semibold text-teal-700 hover:text-teal-900"
+                className="link-brand font-semibold"
               >
                 Log In
               </button>

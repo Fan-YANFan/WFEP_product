@@ -12,7 +12,7 @@ export function LegalLayout({ title, updated, children }: LegalLayoutProps) {
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
       <Link
         href="/"
-        className="text-sm font-medium text-teal-700 transition hover:text-teal-800"
+        className="link-brand text-sm font-medium transition"
       >
         ← Back to home
       </Link>

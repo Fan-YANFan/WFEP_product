@@ -76,7 +76,7 @@ export function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {step === "done" ? (
             <div className="py-6 text-center">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-teal-100 text-teal-700">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand-cyan-muted text-brand-cyan-dark">
                 <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
@@ -89,7 +89,7 @@ export function CartDrawer() {
               <button
                 type="button"
                 onClick={resetCart}
-                className="mt-6 w-full rounded-full bg-teal-600 py-3 text-sm font-semibold text-white hover:bg-teal-700"
+                className="btn-primary mt-6 w-full rounded-full py-3 text-sm"
               >
                 Continue shopping
               </button>
@@ -97,12 +97,12 @@ export function CartDrawer() {
           ) : step === "cart" ? (
             <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4">
               <div className="flex gap-3">
-                <div className="h-16 w-11 shrink-0 rounded-lg bg-gradient-to-b from-teal-500 to-teal-700" />
+                <div className="h-16 w-11 shrink-0 rounded-lg bg-brand-gradient" />
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold text-slate-900">{PRODUCT.name}</p>
                   <p className="text-xs text-slate-500">{PRODUCT.strength}</p>
                   {subscribe && (
-                    <p className="mt-1 text-xs font-medium text-teal-700">Subscription — 15% off</p>
+                    <p className="mt-1 text-xs font-medium text-brand-cyan-dark">Subscription — 15% off</p>
                   )}
                 </div>
                 <p className="shrink-0 font-semibold text-slate-900">${subtotal.toFixed(2)}</p>
@@ -145,7 +145,7 @@ export function CartDrawer() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                  className="input-brand mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
                 />
               </div>
               <div>
@@ -155,7 +155,7 @@ export function CartDrawer() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                  className="input-brand mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
                 />
               </div>
               <div>
@@ -163,16 +163,16 @@ export function CartDrawer() {
                 <input
                   required
                   placeholder="Street, city, ZIP, country"
-                  className="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                  className="input-brand mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm"
                 />
               </div>
               <p className="text-xs text-slate-500">
                 By placing your order you agree to our{" "}
-                <Link href="/terms" className="text-teal-700 underline" onClick={closeCart}>
+                <Link href="/terms" className="link-brand underline" onClick={closeCart}>
                   Terms
                 </Link>{" "}
                 and{" "}
-                <Link href="/privacy" className="text-teal-700 underline" onClick={closeCart}>
+                <Link href="/privacy" className="link-brand underline" onClick={closeCart}>
                   Privacy Policy
                 </Link>
                 .
@@ -202,7 +202,7 @@ export function CartDrawer() {
               <button
                 type="button"
                 onClick={() => setStep("checkout")}
-                className="mt-4 w-full rounded-full bg-teal-600 py-3 text-sm font-semibold text-white hover:bg-teal-700"
+                className="btn-primary mt-4 w-full rounded-full py-3 text-sm"
               >
                 Proceed to checkout
               </button>
@@ -218,7 +218,7 @@ export function CartDrawer() {
                 <button
                   type="submit"
                   form="cart-checkout-form"
-                  className="flex-1 rounded-full bg-teal-600 py-3 text-sm font-semibold text-white hover:bg-teal-700"
+                  className="btn-primary flex-1 rounded-full py-3 text-sm"
                 >
                   Place order (demo)
                 </button>

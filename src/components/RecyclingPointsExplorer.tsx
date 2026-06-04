@@ -132,7 +132,7 @@ export function RecyclingPointsExplorer() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Street, building, area…"
-              className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none ring-teal-600/30 focus:border-teal-500 focus:ring-2"
+              className="input-brand mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
             />
           </div>
           <div className="min-w-[160px]">
@@ -146,7 +146,7 @@ export function RecyclingPointsExplorer() {
                 setDistrict(e.target.value);
                 setOffset(0);
               }}
-              className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-600/30"
+              className="input-brand mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
             >
               <option value="">All districts</option>
               {HK_DISTRICTS.map((d) => (
@@ -164,7 +164,7 @@ export function RecyclingPointsExplorer() {
               id="rcp-locale"
               value={locale}
               onChange={(e) => setLocale(e.target.value as AddressLocale)}
-              className="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-600/30"
+              className="input-brand mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
             >
               <option value="en">English</option>
               <option value="tc">繁體中文</option>
@@ -173,7 +173,7 @@ export function RecyclingPointsExplorer() {
           </div>
           <button
             type="submit"
-            className="rounded-full bg-teal-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-700"
+            className="btn-primary rounded-full px-6 py-2.5 text-sm"
           >
             Search
           </button>
@@ -192,7 +192,7 @@ export function RecyclingPointsExplorer() {
                 setCoords(null);
                 setOffset(0);
               }}
-              className="text-sm text-teal-700 underline"
+              className="link-brand text-sm underline"
             >
               Clear nearby filter
             </button>
@@ -213,7 +213,7 @@ export function RecyclingPointsExplorer() {
               }}
               className={`rounded-full px-3 py-1 text-xs font-medium transition ${
                 wasteType === type
-                  ? "bg-teal-600 text-white"
+                  ? "bg-brand-gradient text-white"
                   : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
@@ -286,7 +286,7 @@ export function RecyclingPointsExplorer() {
                       }
                       className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
                         bookmarked
-                          ? "bg-teal-100 text-teal-800"
+                          ? "bg-brand-cyan-muted text-brand-cyan-foreground"
                           : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                       }`}
                       title={bookmarked ? "Remove bookmark" : "Save to my account"}
@@ -295,7 +295,7 @@ export function RecyclingPointsExplorer() {
                     </button>
                   )}
                   {point.cp_state && (
-                    <span className="rounded-full bg-teal-50 px-2 py-0.5 text-xs font-medium text-teal-800">
+                    <span className="rounded-full bg-brand-cyan-muted px-2 py-0.5 text-xs font-medium text-brand-cyan-foreground">
                       {point.cp_state}
                     </span>
                   )}
@@ -336,7 +336,7 @@ export function RecyclingPointsExplorer() {
                   href={openStreetMapUrl(point.lat, point.lng)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-teal-700 hover:text-teal-900"
+                  className="link-brand text-xs font-semibold"
                 >
                   OpenStreetMap
                 </a>
@@ -344,7 +344,7 @@ export function RecyclingPointsExplorer() {
                   href={googleMapsUrl(point.lat, point.lng)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-teal-700 hover:text-teal-900"
+                  className="link-brand text-xs font-semibold"
                 >
                   Google Maps
                 </a>

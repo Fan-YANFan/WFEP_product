@@ -59,7 +59,7 @@ export default function CookiesPage() {
           </thead>
           <tbody className="divide-y divide-slate-100 text-slate-600">
             <tr>
-              <td className="px-4 py-3 font-mono text-xs">wfep-cookie-preferences</td>
+              <td className="px-4 py-3 font-mono text-xs">collectiv-cookie-preferences</td>
               <td className="px-4 py-3">Stores your cookie consent choices</td>
               <td className="px-4 py-3">1 year</td>
               <td className="px-4 py-3">Necessary</td>
@@ -71,13 +71,13 @@ export default function CookiesPage() {
               <td className="px-4 py-3">Necessary</td>
             </tr>
             <tr>
-              <td className="px-4 py-3 font-mono text-xs">_wfep_analytics</td>
+              <td className="px-4 py-3 font-mono text-xs">_collectiv_analytics</td>
               <td className="px-4 py-3">Anonymous usage statistics</td>
               <td className="px-4 py-3">13 months</td>
               <td className="px-4 py-3">Analytics</td>
             </tr>
             <tr>
-              <td className="px-4 py-3 font-mono text-xs">_wfep_marketing</td>
+              <td className="px-4 py-3 font-mono text-xs">_collectiv_marketing</td>
               <td className="px-4 py-3">Campaign and referral tracking</td>
               <td className="px-4 py-3">90 days</td>
               <td className="px-4 py-3">Marketing</td>

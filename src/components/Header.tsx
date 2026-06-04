@@ -19,11 +19,11 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-slate-200/80 glass">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-600 text-sm font-bold text-white">
-            W
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-gradient text-sm font-bold text-white shadow-md shadow-brand-orange/25">
+            C
           </span>
           <span className="font-display text-lg font-semibold tracking-tight text-slate-900">
-            WFEP Wellness
+            Collectiv
           </span>
         </Link>
 
@@ -34,8 +34,8 @@ export function Header() {
               href={item.href}
               className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                 pathname === item.href
-                  ? "bg-teal-50 text-teal-800"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                  ? "nav-active"
+                  : "text-slate-600 hover:bg-brand-cyan-muted/60 hover:text-slate-900"
               }`}
             >
               {item.label}
@@ -44,7 +44,7 @@ export function Header() {
           {ready && (
             <Link
               href={authHref}
-              className="ml-2 rounded-full bg-teal-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-teal-700"
+              className="btn-primary ml-2 rounded-full px-5 py-2 text-sm"
             >
               {authLabel}
             </Link>
@@ -73,7 +73,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-brand-cyan-muted/60"
               onClick={() => setMenuOpen(false)}
             >
               {item.label}
@@ -82,7 +82,7 @@ export function Header() {
           {ready && (
             <Link
               href={authHref}
-              className="mt-2 block rounded-full bg-teal-600 px-3 py-2.5 text-center text-sm font-semibold text-white hover:bg-teal-700"
+              className="btn-primary mt-2 block rounded-full px-3 py-2.5 text-center text-sm"
               onClick={() => setMenuOpen(false)}
             >
               {authLabel}

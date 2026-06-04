@@ -4,19 +4,19 @@ import { PRODUCT } from "@/lib/product";
 export function ProductCard() {
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-900/5">
-      <div className="relative aspect-[4/3] bg-gradient-to-br from-teal-100 via-slate-50 to-indigo-100">
+      <div className="relative aspect-[4/3] bg-gradient-to-br from-brand-cyan-muted via-slate-50 to-brand-orange-muted">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative">
-            <div className="h-40 w-28 rounded-2xl bg-gradient-to-b from-teal-500 to-teal-700 shadow-lg" />
-            <div className="absolute -right-6 top-8 h-32 w-20 rounded-2xl bg-gradient-to-b from-teal-400/80 to-teal-600/80 shadow-md" />
-            <span className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-bold tracking-wide text-teal-800">
+            <div className="h-40 w-28 rounded-2xl bg-brand-gradient shadow-lg shadow-brand-orange/30" />
+            <div className="absolute -right-6 top-8 h-32 w-20 rounded-2xl bg-brand-gradient opacity-80 shadow-md" />
+            <span className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-3 py-1 text-xs font-bold tracking-wide text-brand-cyan-foreground">
               XR
             </span>
           </div>
         </div>
       </div>
       <div className="p-6 sm:p-8">
-        <p className="text-xs font-semibold uppercase tracking-wider text-teal-700">
+        <p className="text-xs font-semibold uppercase tracking-wider text-brand-cyan-dark">
           Bestseller
         </p>
         <h2 className="font-display mt-2 text-2xl font-semibold text-slate-900">
@@ -31,7 +31,7 @@ export function ProductCard() {
         </div>
         <Link
           href="/product"
-          className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-teal-600 py-3 text-sm font-semibold text-white transition hover:bg-teal-700"
+          className="btn-primary mt-6 inline-flex w-full items-center justify-center rounded-full py-3 text-sm"
         >
           View product
         </Link>

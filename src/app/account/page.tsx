@@ -49,7 +49,7 @@ export default function AccountPage() {
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-teal-800">
+              <p className="text-xs font-semibold uppercase tracking-wider text-brand-cyan-foreground">
                 Member area
               </p>
               <h1 className="font-display mt-2 text-3xl font-semibold text-slate-900 sm:text-4xl">
@@ -100,7 +100,7 @@ export default function AccountPage() {
                       <td className="px-5 py-4">{order.items}</td>
                       <td className="px-5 py-4">${order.total.toFixed(2)}</td>
                       <td className="px-5 py-4">
-                        <span className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-800">
+                        <span className="rounded-full bg-brand-cyan-muted px-2.5 py-0.5 text-xs font-medium text-brand-cyan-foreground">
                           {order.status}
                         </span>
                       </td>
@@ -118,7 +118,7 @@ export default function AccountPage() {
           </h2>
           <p className="mt-1 text-sm text-slate-600">
             Bookmarks from the recycling finder.{" "}
-            <Link href="/" className="font-semibold text-teal-700 hover:text-teal-900">
+            <Link href="/" className="link-brand font-semibold">
               Browse points →
             </Link>
           </p>
@@ -180,7 +180,7 @@ export default function AccountPage() {
                   value={reminderTitle}
                   onChange={(e) => setReminderTitle(e.target.value)}
                   placeholder="e.g. Central district e-waste drive"
-                  className="mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                  className="input-brand mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm"
                 />
               </div>
               <div>
@@ -193,7 +193,7 @@ export default function AccountPage() {
                   required
                   value={reminderDate}
                   onChange={(e) => setReminderDate(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                  className="input-brand mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm"
                 />
               </div>
               <div>
@@ -205,13 +205,13 @@ export default function AccountPage() {
                   value={reminderNotes}
                   onChange={(e) => setReminderNotes(e.target.value)}
                   placeholder="Location, time, what to bring…"
-                  className="mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                  className="input-brand mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm"
                 />
               </div>
             </div>
             <button
               type="submit"
-              className="mt-4 rounded-full bg-teal-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-700"
+              className="btn-primary mt-4 rounded-full px-6 py-2.5 text-sm"
             >
               Add reminder
             </button>
@@ -230,7 +230,7 @@ export default function AccountPage() {
                 >
                   <div>
                     <p className="font-semibold text-slate-900">{reminder.title}</p>
-                    <p className="mt-1 text-sm text-teal-700">{reminder.date}</p>
+                    <p className="mt-1 text-sm text-brand-cyan-dark">{reminder.date}</p>
                     {reminder.notes && (
                       <p className="mt-1 text-sm text-slate-600">{reminder.notes}</p>
                     )}

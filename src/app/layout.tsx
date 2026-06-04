@@ -21,8 +21,8 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: "WFEP Wellness | Calmexa XR",
-    template: "%s | WFEP Wellness",
+    default: "Collectiv",
+    template: "%s | Collectiv",
   },
   description:
     "Find Hong Kong recyclable collection points and manage your member account — order history, saved locations, and recycling event reminders.",

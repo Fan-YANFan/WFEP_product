@@ -1,6 +1,6 @@
-alice Yannis # WFEP Wellness — Product Store
+# Collectiv
 
-Modern Next.js storefront for **Calmexa XR**, a fictional wellness supplement, with full legal pages and cookie consent.
+Modern Next.js app for **Collectiv** — find Hong Kong recycling points, save favourites, and manage member reminders.
 
 ## Getting started
 

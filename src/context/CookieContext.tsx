@@ -24,7 +24,7 @@ type CookieContextValue = {
   openSettings: () => void;
 };
 
-const STORAGE_KEY = "wfep-cookie-preferences";
+const STORAGE_KEY = "collectiv-cookie-preferences";
 
 const defaultPreferences: CookiePreferences = {
   necessary: true,

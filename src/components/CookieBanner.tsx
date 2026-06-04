@@ -23,7 +23,7 @@ export function CookieBanner() {
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           We use cookies to run our site, understand usage, and personalize offers. You can accept
           all, reject non-essential cookies, or customize your choices. See our{" "}
-          <Link href="/cookies" className="font-medium text-teal-700 underline">
+          <Link href="/cookies" className="link-brand underline">
             Cookie Policy
           </Link>
           .
@@ -43,7 +43,7 @@ export function CookieBanner() {
                 type="checkbox"
                 checked={analytics}
                 onChange={(e) => setAnalytics(e.target.checked)}
-                className="mt-1 accent-teal-600"
+                className="mt-1 accent-brand-cyan"
               />
               <span>
                 <strong className="text-slate-800">Analytics</strong>
@@ -55,7 +55,7 @@ export function CookieBanner() {
                 type="checkbox"
                 checked={marketing}
                 onChange={(e) => setMarketing(e.target.checked)}
-                className="mt-1 accent-teal-600"
+                className="mt-1 accent-brand-cyan"
               />
               <span>
                 <strong className="text-slate-800">Marketing</strong>
@@ -69,7 +69,7 @@ export function CookieBanner() {
           <button
             type="button"
             onClick={acceptAll}
-            className="rounded-full bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-700"
+            className="btn-primary rounded-full px-5 py-2.5 text-sm"
           >
             Accept all
           </button>
@@ -84,7 +84,7 @@ export function CookieBanner() {
             <button
               type="button"
               onClick={() => savePreferences({ analytics, marketing })}
-              className="rounded-full border border-teal-200 bg-teal-50 px-5 py-2.5 text-sm font-semibold text-teal-800 transition hover:bg-teal-100"
+              className="badge-brand rounded-full px-5 py-2.5 text-sm font-semibold transition hover:bg-brand-cyan-muted/80"
             >
               Save preferences
             </button>
@@ -92,7 +92,7 @@ export function CookieBanner() {
             <button
               type="button"
               onClick={() => setShowDetails(true)}
-              className="rounded-full px-5 py-2.5 text-sm font-semibold text-teal-700 transition hover:bg-teal-50"
+              className="link-brand rounded-full px-5 py-2.5 text-sm font-semibold transition hover:bg-brand-cyan-muted/60"
             >
               Customize
             </button>

@@ -27,8 +27,8 @@ export const PRODUCT = {
 } as const;
 
 export const COMPANY = {
-  name: "WFEP Wellness Ltd.",
-  email: "support@wfep-wellness.com",
+  name: "Collectiv",
+  email: "support@collectiv.hk",
   address: "120 Harbor Lane, Suite 400, San Francisco, CA 94111, USA",
   phone: "+1 (800) 555-0192",
 } as const;

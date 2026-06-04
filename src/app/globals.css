@@ -4,8 +4,17 @@
   --color-background: #f8fafc;
   --color-foreground: #0f172a;
   --color-muted: #64748b;
-  --color-accent: #0d9488;
-  --color-accent-dark: #0f766e;
+  --color-brand-cyan: #00eeff;
+  --color-brand-orange: #ffa34d;
+  --color-brand-cyan-dark: #00b8cc;
+  --color-brand-orange-dark: #e08835;
+  --color-brand-cyan-muted: #e6fcff;
+  --color-brand-orange-muted: #fff4e8;
+  --color-brand-cyan-foreground: #0a6573;
+  --color-brand-orange-foreground: #a35418;
+  --color-accent: #00b8cc;
+  --color-accent-secondary: #ffa34d;
+  --color-accent-dark: #0099ad;
   --color-surface: #ffffff;
   --color-border: #e2e8f0;
   --font-sans: var(--font-dm-sans);
@@ -31,17 +40,75 @@ body {
   font-family: var(--font-display), Georgia, serif;
 }
 
+.bg-brand-gradient {
+  background: linear-gradient(135deg, #00eeff 0%, #ffa34d 100%);
+}
+
+.text-brand-gradient {
+  background: linear-gradient(135deg, #00eeff 0%, #ffa34d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .gradient-mesh {
   background:
-    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(13, 148, 136, 0.18), transparent),
-    radial-gradient(ellipse 60% 40% at 90% 10%, rgba(99, 102, 241, 0.12), transparent),
-    radial-gradient(ellipse 50% 30% at 50% 100%, rgba(13, 148, 136, 0.08), transparent);
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(0, 238, 255, 0.22), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 10%, rgba(255, 163, 77, 0.16), transparent),
+    radial-gradient(ellipse 50% 30% at 50% 100%, rgba(0, 238, 255, 0.08), transparent);
 }
 
 .glass {
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00eeff 0%, #ffa34d 100%);
+  color: #ffffff;
+  font-weight: 600;
+  transition: opacity 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 8px 24px -6px rgba(255, 163, 77, 0.35);
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.92;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+}
+
+.link-brand {
+  color: var(--color-brand-cyan-dark);
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.link-brand:hover {
+  color: var(--color-accent-dark);
+}
+
+.badge-brand {
+  border: 1px solid rgba(0, 238, 255, 0.35);
+  background: var(--color-brand-cyan-muted);
+  color: var(--color-brand-cyan-foreground);
+}
+
+.nav-active {
+  background: var(--color-brand-cyan-muted);
+  color: var(--color-brand-cyan-foreground);
+}
+
+.input-brand {
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-brand:focus {
+  border-color: var(--color-brand-cyan);
+  box-shadow: 0 0 0 2px rgba(0, 238, 255, 0.22);
 }
 
 .legal-prose h2 {
@@ -79,6 +146,10 @@ body {
 }
 
 .legal-prose a {
-  color: var(--color-accent);
+  color: var(--color-brand-cyan-dark);
   text-decoration: underline;
+}
+
+.legal-prose a:hover {
+  color: var(--color-accent-dark);
 }

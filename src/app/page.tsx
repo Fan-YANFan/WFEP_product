@@ -13,7 +13,8 @@ export default function HomePage() {
     <>
       <section className="gradient-mesh border-b border-slate-200/60">
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:py-18">
-          <p className="inline-flex items-center gap-2 rounded-full border border-teal-200/80 bg-teal-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-teal-800">
+          <p className="badge-brand inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-gradient" />
             Hong Kong · Live open data
           </p>
           <h1 className="font-display mt-6 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
@@ -27,7 +28,7 @@ export default function HomePage() {
               href={CSDI_PORTAL_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-teal-700 underline hover:text-teal-900"
+              className="link-brand underline"
             >
               CSDI geoportal
             </a>
