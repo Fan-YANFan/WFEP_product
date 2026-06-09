@@ -24,7 +24,7 @@ export const en: Translations = {
   },
   nav: {
     home: "Home",
-    booking: "Book pickup",
+    booking: "Book PickUp",
     myAccount: "My Account",
     login: "Log In / Sign In",
     openMenu: "Open menu",
@@ -101,7 +101,8 @@ export const en: Translations = {
   booking: {
     back: "Back",
     title: "Schedule a Pickup",
-    subtitle: "Fill in your location details and estimate your recycle weight to complete your booking.",
+    subtitle:
+      "Fill in your location and material details. Your estimate uses our logistics pricing formula below.",
     fullName: "Full Name",
     namePlaceholder: "Chan Tai Man",
     phone: "WhatsApp / Phone Number",
@@ -112,16 +113,44 @@ export const en: Translations = {
     addressPlaceholder: "Flat B, 12/F, Silver Tower, Nathan Road",
     date: "Preferred Collection Date",
     material: "Primary Recycling Material",
-    weight: "Estimated Weight",
-    minWeight: "Min: 2kg",
-    maxWeight: "Max: 100kg+",
-    estPayout: "Est. Cash payout",
+    weight: "Estimated Weight (kg)",
+    minWeight: "Min: 2 kg",
+    maxWeight: "Max: 100 kg+",
+    pricingTitle: "Pricing breakdown",
+    pricingFormula: "Total Charge = Base Logistics Fee + (Weight × Rate per kg)",
+    pricingFormulaNote: "Walk-up and remote-area surcharges are added below.",
+    tunnelNote:
+      "Base logistics fee includes fuel, driver time, and allowance for Western Harbour Crossing / Tai Lam Tunnel on regular routes.",
+    baseLogisticsFee: "Base logistics fee",
+    baseLogisticsNote:
+      "Includes fuel, driver time, and tunnel toll allowance on standard logistics routes.",
+    weightCharge: "Weight charge",
+    weightChargeFormula: "{weight} kg × HK$ {rate}/kg",
+    walkUpTitle: "Walk-up (Tong Lau) surcharge",
+    walkUpDesc:
+      "If the building has no elevator, or the lift does not stop on your floor, a staircase fee applies.",
+    walkUpToggle: "Walk-up building — no lift access to my floor",
+    floors: "Floors to climb",
+    bagCount: "Bags / items",
+    walkUpFee: "Staircase fee",
+    walkUpRateNote:
+      "Standard industry range: HK$200–500 per floor, per bag/item. Quote uses HK$350 midpoint.",
+    remoteAreaTitle: "Distance / remote area surcharge",
+    remoteAreaDesc:
+      "Extra fuel and travel time for outer New Territories, Lantau, and other remote locations.",
+    remoteAreas: {
+      none: "Standard urban route (no surcharge)",
+      moderate: "Outer New Territories (+HK$50)",
+      standard: "Sai Kung, Cyberport, Discovery Bay (+HK$100)",
+      remote: "Deep Yuen Long villages, Lantau Island (+HK$150)",
+    },
+    totalCharge: "Estimated total charge",
     submit: "Confirm Logistics Request",
     confirmed: "Booking Confirmed!",
     confirmedBody:
       "Thank you, {name}. Our logistics team will text you at {phone} to confirm your slot on {date}.",
-    estWeight: "Estimated Weight:",
-    estCashback: "Estimated Cashback:",
+    estWeight: "Estimated weight:",
+    estTotalCharge: "Estimated total charge:",
     backHome: "Back to Homepage",
     regions: [
       "Hong Kong Island (Central & Western, Wan Chai, Eastern, Southern)",
@@ -134,6 +163,7 @@ export const en: Translations = {
       metals: "Metals (Aluminium/Steel)",
       ewaste: "E-Waste / Small Appliances",
     },
+    perKg: "/kg",
   },
   login: {
     loginTitle: "Log In",
@@ -303,15 +333,34 @@ export type Translations = {
     weight: string;
     minWeight: string;
     maxWeight: string;
-    estPayout: string;
+    pricingTitle: string;
+    pricingFormula: string;
+    pricingFormulaNote: string;
+    tunnelNote: string;
+    baseLogisticsFee: string;
+    baseLogisticsNote: string;
+    weightCharge: string;
+    weightChargeFormula: string;
+    walkUpTitle: string;
+    walkUpDesc: string;
+    walkUpToggle: string;
+    floors: string;
+    bagCount: string;
+    walkUpFee: string;
+    walkUpRateNote: string;
+    remoteAreaTitle: string;
+    remoteAreaDesc: string;
+    remoteAreas: Record<string, string>;
+    totalCharge: string;
     submit: string;
     confirmed: string;
     confirmedBody: string;
     estWeight: string;
-    estCashback: string;
+    estTotalCharge: string;
     backHome: string;
     regions: readonly string[];
     materials: Record<string, string>;
+    perKg: string;
   };
   login: {
     loginTitle: string;

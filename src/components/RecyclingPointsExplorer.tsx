@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  Bookmark,
+  BookmarkCheck,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  MapPin,
+  Navigation,
+  Search,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
@@ -14,6 +25,7 @@ import {
 } from "@/lib/csdi/display";
 import { getDistrictLabel } from "@/lib/i18n/districts";
 import { formatMessage } from "@/lib/i18n";
+import { getWasteTypeStyle } from "@/lib/waste-types";
 import type { RecyclingCollectionPoint } from "@/lib/csdi/types";
 
 interface ApiResponse {
@@ -132,21 +144,24 @@ export function RecyclingPointsExplorer() {
     <div className="space-y-8">
       <form
         onSubmit={handleSearchSubmit}
-        className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        className="animate-scale-in rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
       >
         <div className="flex flex-wrap items-end gap-4">
           <div className="min-w-[140px] flex-1">
             <label htmlFor="rcp-search" className="text-xs font-semibold uppercase tracking-wider text-slate-500">
               {t.explorer.searchAddress}
             </label>
-            <input
-              id="rcp-search"
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={t.explorer.searchPlaceholder}
-              className="input-brand mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-            />
+            <div className="relative mt-1.5">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input
+                id="rcp-search"
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t.explorer.searchPlaceholder}
+                className="input-brand w-full rounded-lg border border-slate-200 py-2 pr-3 pl-9 text-sm"
+              />
+            </div>
           </div>
           <div className="min-w-[160px]">
             <label htmlFor="rcp-district" className="text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -169,17 +184,15 @@ export function RecyclingPointsExplorer() {
               ))}
             </select>
           </div>
-          <button
-            type="submit"
-            className="btn-primary rounded-full px-6 py-2.5 text-sm"
-          >
+          <button type="submit" className="btn-primary rounded-full px-6 py-2.5 text-sm">
             {t.common.search}
           </button>
           <button
             type="button"
             onClick={requestNearby}
-            className="rounded-full border border-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-brand-cyan hover:bg-brand-cyan-muted/50 hover:text-brand-cyan-foreground"
           >
+            <Navigation className="h-4 w-4" />
             {t.explorer.nearMe}
           </button>
           {nearby && (
@@ -197,32 +210,41 @@ export function RecyclingPointsExplorer() {
           )}
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          <span className="w-full text-xs font-semibold uppercase tracking-wider text-slate-500">
+        <div className="mt-5 flex flex-wrap gap-2">
+          <span className="mb-1 flex w-full items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
             {t.explorer.wasteType}
           </span>
-          {WASTE_TYPE_FILTERS.map((type) => (
-            <button
-              key={type}
-              type="button"
-              onClick={() => {
-                setWasteType(wasteType === type ? "" : type);
-                setOffset(0);
-              }}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-                wasteType === type
-                  ? "bg-brand-gradient text-white"
-                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-              }`}
-            >
-              {t.explorer.wasteTypes[type]}
-            </button>
-          ))}
+          {WASTE_TYPE_FILTERS.map((type) => {
+            const style = getWasteTypeStyle(type);
+            const Icon = style.icon;
+            const selected = wasteType === type;
+            const label = t.explorer.wasteTypes[type] ?? type;
+
+            return (
+              <button
+                key={type}
+                type="button"
+                onClick={() => {
+                  setWasteType(selected ? "" : type);
+                  setOffset(0);
+                }}
+                className={`chip-pop inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                  selected ? `${style.chipActive} scale-105` : style.chip
+                }`}
+              >
+                <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                {label}
+              </button>
+            );
+          })}
         </div>
 
-        {geoError && <p className="mt-3 text-sm text-amber-700">{geoError}</p>}
+        {geoError && (
+          <p className="animate-fade-in mt-3 text-sm text-amber-700">{geoError}</p>
+        )}
         {nearby && coords && (
-          <p className="mt-3 text-sm text-slate-600">
+          <p className="animate-fade-in mt-3 flex items-center gap-1.5 text-sm text-slate-600">
+            <Navigation className="h-4 w-4 text-brand-cyan-dark" />
             {formatMessage(t.explorer.nearMeHint, {
               km: (NEARBY_RADIUS_M / 1000).toFixed(1),
             })}
@@ -231,139 +253,197 @@ export function RecyclingPointsExplorer() {
       </form>
 
       <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600">
-        <p>{resultsLabel}</p>
+        <p className={loading ? "animate-pulse" : ""}>{resultsLabel}</p>
         <div className="flex gap-2">
           <button
             type="button"
             disabled={loading || offset === 0}
             onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
-            className="rounded-lg border border-slate-200 px-3 py-1.5 disabled:opacity-40"
+            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 transition hover:bg-slate-50 disabled:opacity-40"
           >
+            <ChevronLeft className="h-4 w-4" />
             {t.common.previous}
           </button>
           <button
             type="button"
             disabled={loading || !data || offset + PAGE_SIZE >= total}
             onClick={() => setOffset(offset + PAGE_SIZE)}
-            className="rounded-lg border border-slate-200 px-3 py-1.5 disabled:opacity-40"
+            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 transition hover:bg-slate-50 disabled:opacity-40"
           >
             {t.common.next}
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+        <div className="animate-fade-in rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
           {error}
         </div>
       )}
 
       <ul className="grid gap-4 sm:grid-cols-2">
         {!loading &&
-          data?.points.map((point) => {
-            const address = getAddress(point, addressLocale);
-            const bookmarked = isBookmarked(point.cp_id);
-
-            return (
-            <li
+          data?.points.map((point, index) => (
+            <PointCard
               key={point.cp_id}
-              className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:shadow-md"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <p className="font-display text-base font-semibold text-slate-900 leading-snug">
-                  {address}
-                </p>
-                <div className="flex shrink-0 items-center gap-2">
-                  {member && (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        bookmarked
-                          ? removeBookmark(point.cp_id)
-                          : addBookmark(point, address)
-                      }
-                      className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
-                        bookmarked
-                          ? "bg-brand-cyan-muted text-brand-cyan-foreground"
-                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                      }`}
-                      title={bookmarked ? t.explorer.removeBookmarkTitle : t.explorer.saveTitle}
-                    >
-                      {bookmarked ? t.explorer.saved : t.explorer.save}
-                    </button>
-                  )}
-                  {point.cp_state && (
-                    <span className="rounded-full bg-brand-cyan-muted px-2 py-0.5 text-xs font-medium text-brand-cyan-foreground">
-                      {point.cp_state}
-                    </span>
-                  )}
-                </div>
-              </div>
-              {point.district_id && (
-                <p className="mt-1 text-xs text-slate-500">
-                  {getDistrictLabel(point.district_id, siteLocale)}
-                </p>
-              )}
-              {point.legend && (
-                <p className="mt-2 text-sm text-slate-600">{point.legend}</p>
-              )}
-              {point.waste_type && (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {parseWasteTypes(point.waste_type).map((w) => (
-                    <span
-                      key={w}
-                      className="rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-700"
-                    >
-                      {w}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {getOpenHours(point, addressLocale) && (
-                <p className="mt-2 text-xs text-slate-600">
-                  <span className="font-medium text-slate-700">{t.explorer.hours} </span>
-                  {getOpenHours(point, addressLocale)}
-                </p>
-              )}
-              {getContact(point, addressLocale) && (
-                <p className="mt-1 text-xs text-slate-600">{getContact(point, addressLocale)}</p>
-              )}
-              {point.accessibilty_notes && (
-                <p className="mt-2 text-xs text-slate-500">{point.accessibilty_notes}</p>
-              )}
-              <div className="mt-4 flex flex-wrap gap-3 text-xs font-semibold">
-                <a
-                  href={openStreetMapUrl(point.lat, point.lng)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-brand text-xs font-semibold"
-                >
-                  {t.explorer.openStreetMap}
-                </a>
-                <a
-                  href={googleMapsUrl(point.lat, point.lng)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-brand text-xs font-semibold"
-                >
-                  {t.explorer.googleMaps}
-                </a>
-                <span className="text-slate-400">
-                  {point.lat.toFixed(5)}, {point.lng.toFixed(5)}
-                </span>
-              </div>
-            </li>
-            );
-          })}
+              point={point}
+              index={index}
+              address={getAddress(point, addressLocale)}
+              bookmarked={isBookmarked(point.cp_id)}
+              member={!!member}
+              siteLocale={siteLocale}
+              t={t}
+              onToggleBookmark={() =>
+                isBookmarked(point.cp_id)
+                  ? removeBookmark(point.cp_id)
+                  : addBookmark(point, getAddress(point, addressLocale))
+              }
+            />
+          ))}
       </ul>
 
       {loading && (
         <div className="grid gap-4 sm:grid-cols-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-40 animate-pulse rounded-2xl bg-slate-200/60" />
+            <div
+              key={i}
+              className="animate-shimmer h-44 rounded-2xl border border-slate-100 bg-slate-100"
+            />
           ))}
         </div>
       )}
     </div>
+  );
+}
+
+interface PointCardProps {
+  point: RecyclingCollectionPoint;
+  index: number;
+  address: string;
+  bookmarked: boolean;
+  member: boolean;
+  siteLocale: "en" | "zh";
+  t: ReturnType<typeof useLanguage>["t"];
+  onToggleBookmark: () => void;
+}
+
+function PointCard({
+  point,
+  index,
+  address,
+  bookmarked,
+  member,
+  siteLocale,
+  t,
+  onToggleBookmark,
+}: PointCardProps) {
+  const addressLocale = siteLocale === "zh" ? "tc" : "en";
+  const stagger = Math.min(index % 6, 5) + 1;
+
+  return (
+    <li
+      className={`hover-lift animate-fade-in-up stagger-${stagger} rounded-2xl border border-slate-100 bg-white p-5 shadow-sm`}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <p className="font-display text-base leading-snug font-semibold text-slate-900">{address}</p>
+        <div className="flex shrink-0 items-center gap-2">
+          {member && (
+            <button
+              type="button"
+              onClick={onToggleBookmark}
+              className={`rounded-full px-2.5 py-1 text-xs ${
+                bookmarked ? "btn-save-saved" : "btn-save"
+              }`}
+              title={bookmarked ? t.explorer.removeBookmarkTitle : t.explorer.saveTitle}
+            >
+              {bookmarked ? (
+                <BookmarkCheck className="h-3.5 w-3.5" aria-hidden />
+              ) : (
+                <Bookmark className="h-3.5 w-3.5" aria-hidden />
+              )}
+              {bookmarked ? t.explorer.saved : t.explorer.save}
+            </button>
+          )}
+          {point.cp_state && (
+            <span className="status-accepted rounded-full px-2 py-0.5 text-xs">
+              <CheckCircle2 className="h-3 w-3" aria-hidden />
+              {point.cp_state}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {point.district_id && (
+        <p className="mt-1.5 flex items-center gap-1 text-xs text-slate-500">
+          <MapPin className="h-3 w-3 shrink-0 text-slate-400" />
+          {getDistrictLabel(point.district_id, siteLocale)}
+        </p>
+      )}
+
+      {point.legend && <p className="mt-2 text-sm text-slate-600">{point.legend}</p>}
+
+      {point.waste_type && (
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {parseWasteTypes(point.waste_type).map((w) => {
+            const style = getWasteTypeStyle(w);
+            const Icon = style.icon;
+            const label = t.explorer.wasteTypes[w] ?? w;
+
+            return (
+              <span
+                key={w}
+                className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium ${style.tag}`}
+              >
+                <Icon className="h-3 w-3 shrink-0" aria-hidden />
+                {label}
+              </span>
+            );
+          })}
+        </div>
+      )}
+
+      {getOpenHours(point, addressLocale) && (
+        <p className="mt-2 flex items-start gap-1.5 text-xs text-slate-600">
+          <Clock className="mt-0.5 h-3 w-3 shrink-0 text-slate-400" />
+          <span>
+            <span className="font-medium text-slate-700">{t.explorer.hours} </span>
+            {getOpenHours(point, addressLocale)}
+          </span>
+        </p>
+      )}
+
+      {getContact(point, addressLocale) && (
+        <p className="mt-1 text-xs text-slate-600">{getContact(point, addressLocale)}</p>
+      )}
+
+      {point.accessibilty_notes && (
+        <p className="mt-2 text-xs text-slate-500">{point.accessibilty_notes}</p>
+      )}
+
+      <div className="mt-4 flex flex-wrap gap-3 text-xs font-semibold">
+        <a
+          href={openStreetMapUrl(point.lat, point.lng)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="link-brand inline-flex items-center gap-1"
+        >
+          <MapPin className="h-3 w-3" />
+          {t.explorer.openStreetMap}
+        </a>
+        <a
+          href={googleMapsUrl(point.lat, point.lng)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="link-brand inline-flex items-center gap-1"
+        >
+          <Navigation className="h-3 w-3" />
+          {t.explorer.googleMaps}
+        </a>
+        {/* <span className="text-slate-400">
+          {point.lat.toFixed(5)}, {point.lng.toFixed(5)}
+        </span> */}
+      </div>
+    </li>
   );
 }
