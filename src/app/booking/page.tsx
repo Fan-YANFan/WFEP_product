@@ -5,12 +5,12 @@ import { useMemo, useState } from "react";
 import {
   ArrowLeft,
   Building2,
-  Calendar,
   CheckCircle2,
   MapPin,
   MapPinned,
   Weight,
 } from "lucide-react";
+import { CollectionDatePicker } from "@/components/booking/CollectionDatePicker";
 import { PricingBreakdown } from "@/components/booking/PricingBreakdown";
 import { useLanguage } from "@/context/LanguageContext";
 import {
@@ -59,6 +59,7 @@ export default function BookingPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.date) return;
     setSubmitted(true);
   };
 
@@ -179,45 +180,33 @@ export default function BookingPage() {
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  {t.booking.date}
-                </label>
-                <div className="relative">
-                  <Calendar className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
-                  <input
-                    type="date"
-                    required
-                    className="input-brand w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm"
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  />
-                </div>
-              </div>
+            <CollectionDatePicker
+              required
+              value={formData.date}
+              onChange={(date) => setFormData({ ...formData, date })}
+            />
 
-              <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  {t.booking.material}
-                </label>
-                <select
-                  className="input-brand w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm"
-                  value={formData.materialType}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      materialType: e.target.value as MaterialId,
-                    })
-                  }
-                >
-                  {MATERIAL_IDS.map((id) => (
-                    <option key={id} value={id}>
-                      {t.booking.materials[id]} (HK$ {MATERIAL_RATES_PER_KG[id]}
-                      {t.booking.perKg})
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-slate-700">
+                {t.booking.material}
+              </label>
+              <select
+                className="input-brand w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm"
+                value={formData.materialType}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    materialType: e.target.value as MaterialId,
+                  })
+                }
+              >
+                {MATERIAL_IDS.map((id) => (
+                  <option key={id} value={id}>
+                    {t.booking.materials[id]} (HK$ {MATERIAL_RATES_PER_KG[id]}
+                    {t.booking.perKg})
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="rounded-2xl border border-slate-100 bg-slate-50 p-5">

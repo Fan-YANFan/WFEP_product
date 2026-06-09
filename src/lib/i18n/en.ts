@@ -112,6 +112,10 @@ export const en: Translations = {
     address: "Full Street Address & Unit",
     addressPlaceholder: "Flat B, 12/F, Silver Tower, Nathan Road",
     date: "Preferred Collection Date",
+    selectedDate: "Selected pickup date",
+    selectDateHint: "Choose a date below",
+    prevMonth: "Previous month",
+    nextMonth: "Next month",
     material: "Primary Recycling Material",
     weight: "Estimated Weight (kg)",
     minWeight: "Min: 2 kg",
@@ -161,7 +165,7 @@ export const en: Translations = {
       plastics: "Plastics",
       paper: "Paper/Cardboard",
       metals: "Metals (Aluminium/Steel)",
-      ewaste: "E-Waste / Small Appliances",
+      ewaste: "E-Waste / Small or Large Appliances",
     },
     perKg: "/kg",
   },
@@ -329,6 +333,10 @@ export type Translations = {
     address: string;
     addressPlaceholder: string;
     date: string;
+    selectedDate: string;
+    selectDateHint: string;
+    prevMonth: string;
+    nextMonth: string;
     material: string;
     weight: string;
     minWeight: string;

@@ -293,6 +293,14 @@ body {
   transform: scale(0.94);
 }
 
+.collection-day-cell:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.collection-day-cell.bg-brand-gradient:active {
+  transform: scale(0.98);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in-up,
   .animate-fade-in,

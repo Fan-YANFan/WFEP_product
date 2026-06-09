@@ -5,8 +5,8 @@ export type MaterialId = (typeof MATERIAL_IDS)[number];
 export const MATERIAL_RATES_PER_KG: Record<MaterialId, number> = {
   plastics: 2.0,
   paper: 1.5,
-  metals: 3.0,
-  ewaste: 1.2,
+  metals: 10,
+  ewaste: 30,
 };
 
 /**
