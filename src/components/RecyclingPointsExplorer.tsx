@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { HK_DISTRICTS, WASTE_TYPE_FILTERS } from "@/lib/csdi/constants";
 import {
-  formatDistrictLabel,
   getAddress,
   getContact,
   getOpenHours,
@@ -12,7 +12,9 @@ import {
   openStreetMapUrl,
   parseWasteTypes,
 } from "@/lib/csdi/display";
-import type { AddressLocale, RecyclingCollectionPoint } from "@/lib/csdi/types";
+import { getDistrictLabel } from "@/lib/i18n/districts";
+import { formatMessage } from "@/lib/i18n";
+import type { RecyclingCollectionPoint } from "@/lib/csdi/types";
 
 interface ApiResponse {
   points: RecyclingCollectionPoint[];
@@ -27,7 +29,8 @@ const NEARBY_RADIUS_M = 2000;
 
 export function RecyclingPointsExplorer() {
   const { member, addBookmark, removeBookmark, isBookmarked } = useAuth();
-  const [locale, setLocale] = useState<AddressLocale>("en");
+  const { locale: siteLocale, t } = useLanguage();
+  const addressLocale = siteLocale === "zh" ? "tc" : "en";
   const [district, setDistrict] = useState("");
   const [wasteType, setWasteType] = useState("");
   const [search, setSearch] = useState("");
@@ -67,14 +70,14 @@ export function RecyclingPointsExplorer() {
         const json = (await res.json()) as ApiResponse;
         if (cancelled) return;
         if (!res.ok) {
-          setError(json.error ?? "Request failed");
+          setError(json.error ?? t.explorer.requestFailed);
           setData(null);
         } else {
           setData(json);
         }
       } catch {
         if (!cancelled) {
-          setError("Could not reach the recycling points API.");
+          setError(t.explorer.apiError);
           setData(null);
         }
       } finally {
@@ -86,7 +89,7 @@ export function RecyclingPointsExplorer() {
     return () => {
       cancelled = true;
     };
-  }, [coords, district, nearby, offset, refreshNonce, search, wasteType]);
+  }, [coords, district, nearby, offset, refreshNonce, search, wasteType, t.explorer.apiError, t.explorer.requestFailed]);
 
   function handleSearchSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -97,7 +100,7 @@ export function RecyclingPointsExplorer() {
   function requestNearby() {
     setGeoError(null);
     if (!navigator.geolocation) {
-      setGeoError("Geolocation is not supported in this browser.");
+      setGeoError(t.explorer.geoUnsupported);
       return;
     }
     navigator.geolocation.getCurrentPosition(
@@ -106,7 +109,7 @@ export function RecyclingPointsExplorer() {
         setNearby(true);
         setOffset(0);
       },
-      () => setGeoError("Location permission denied or unavailable."),
+      () => setGeoError(t.explorer.geoDenied),
       { enableHighAccuracy: true, timeout: 15000 },
     );
   }
@@ -114,6 +117,16 @@ export function RecyclingPointsExplorer() {
   const total = data?.total ?? 0;
   const pageStart = total === 0 ? 0 : offset + 1;
   const pageEnd = Math.min(offset + PAGE_SIZE, total);
+
+  const resultsLabel = useMemo(() => {
+    if (loading) return t.common.loading;
+    if (total === 0) return t.explorer.noResults;
+    return formatMessage(t.explorer.showing, {
+      start: pageStart,
+      end: pageEnd,
+      total,
+    });
+  }, [loading, total, pageStart, pageEnd, t]);
 
   return (
     <div className="space-y-8">
@@ -124,20 +137,20 @@ export function RecyclingPointsExplorer() {
         <div className="flex flex-wrap items-end gap-4">
           <div className="min-w-[140px] flex-1">
             <label htmlFor="rcp-search" className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Search address
+              {t.explorer.searchAddress}
             </label>
             <input
               id="rcp-search"
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Street, building, area…"
+              placeholder={t.explorer.searchPlaceholder}
               className="input-brand mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
             />
           </div>
           <div className="min-w-[160px]">
             <label htmlFor="rcp-district" className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              District
+              {t.explorer.district}
             </label>
             <select
               id="rcp-district"
@@ -148,41 +161,26 @@ export function RecyclingPointsExplorer() {
               }}
               className="input-brand mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
             >
-              <option value="">All districts</option>
+              <option value="">{t.explorer.allDistricts}</option>
               {HK_DISTRICTS.map((d) => (
                 <option key={d} value={d}>
-                  {formatDistrictLabel(d)}
+                  {getDistrictLabel(d, siteLocale)}
                 </option>
               ))}
-            </select>
-          </div>
-          <div className="min-w-[160px]">
-            <label htmlFor="rcp-locale" className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Language
-            </label>
-            <select
-              id="rcp-locale"
-              value={locale}
-              onChange={(e) => setLocale(e.target.value as AddressLocale)}
-              className="input-brand mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm"
-            >
-              <option value="en">English</option>
-              <option value="tc">繁體中文</option>
-              <option value="sc">简体中文</option>
             </select>
           </div>
           <button
             type="submit"
             className="btn-primary rounded-full px-6 py-2.5 text-sm"
           >
-            Search
+            {t.common.search}
           </button>
           <button
             type="button"
             onClick={requestNearby}
             className="rounded-full border border-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
           >
-            Near me
+            {t.explorer.nearMe}
           </button>
           {nearby && (
             <button
@@ -194,14 +192,14 @@ export function RecyclingPointsExplorer() {
               }}
               className="link-brand text-sm underline"
             >
-              Clear nearby filter
+              {t.explorer.clearNearby}
             </button>
           )}
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
           <span className="w-full text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Waste type
+            {t.explorer.wasteType}
           </span>
           {WASTE_TYPE_FILTERS.map((type) => (
             <button
@@ -217,7 +215,7 @@ export function RecyclingPointsExplorer() {
                   : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
-              {type}
+              {t.explorer.wasteTypes[type]}
             </button>
           ))}
         </div>
@@ -225,15 +223,15 @@ export function RecyclingPointsExplorer() {
         {geoError && <p className="mt-3 text-sm text-amber-700">{geoError}</p>}
         {nearby && coords && (
           <p className="mt-3 text-sm text-slate-600">
-            Showing points within {(NEARBY_RADIUS_M / 1000).toFixed(1)} km of your location.
+            {formatMessage(t.explorer.nearMeHint, {
+              km: (NEARBY_RADIUS_M / 1000).toFixed(1),
+            })}
           </p>
         )}
       </form>
 
       <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600">
-        <p>
-          {loading ? "Loading…" : total === 0 ? "No results" : `Showing ${pageStart}–${pageEnd} of ${total.toLocaleString()} points`}
-        </p>
+        <p>{resultsLabel}</p>
         <div className="flex gap-2">
           <button
             type="button"
@@ -241,7 +239,7 @@ export function RecyclingPointsExplorer() {
             onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
             className="rounded-lg border border-slate-200 px-3 py-1.5 disabled:opacity-40"
           >
-            Previous
+            {t.common.previous}
           </button>
           <button
             type="button"
@@ -249,7 +247,7 @@ export function RecyclingPointsExplorer() {
             onClick={() => setOffset(offset + PAGE_SIZE)}
             className="rounded-lg border border-slate-200 px-3 py-1.5 disabled:opacity-40"
           >
-            Next
+            {t.common.next}
           </button>
         </div>
       </div>
@@ -263,7 +261,7 @@ export function RecyclingPointsExplorer() {
       <ul className="grid gap-4 sm:grid-cols-2">
         {!loading &&
           data?.points.map((point) => {
-            const address = getAddress(point, locale);
+            const address = getAddress(point, addressLocale);
             const bookmarked = isBookmarked(point.cp_id);
 
             return (
@@ -289,9 +287,9 @@ export function RecyclingPointsExplorer() {
                           ? "bg-brand-cyan-muted text-brand-cyan-foreground"
                           : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                       }`}
-                      title={bookmarked ? "Remove bookmark" : "Save to my account"}
+                      title={bookmarked ? t.explorer.removeBookmarkTitle : t.explorer.saveTitle}
                     >
-                      {bookmarked ? "Saved" : "Save"}
+                      {bookmarked ? t.explorer.saved : t.explorer.save}
                     </button>
                   )}
                   {point.cp_state && (
@@ -302,7 +300,9 @@ export function RecyclingPointsExplorer() {
                 </div>
               </div>
               {point.district_id && (
-                <p className="mt-1 text-xs text-slate-500">{formatDistrictLabel(point.district_id)}</p>
+                <p className="mt-1 text-xs text-slate-500">
+                  {getDistrictLabel(point.district_id, siteLocale)}
+                </p>
               )}
               {point.legend && (
                 <p className="mt-2 text-sm text-slate-600">{point.legend}</p>
@@ -319,14 +319,14 @@ export function RecyclingPointsExplorer() {
                   ))}
                 </div>
               )}
-              {getOpenHours(point, locale) && (
+              {getOpenHours(point, addressLocale) && (
                 <p className="mt-2 text-xs text-slate-600">
-                  <span className="font-medium text-slate-700">Hours: </span>
-                  {getOpenHours(point, locale)}
+                  <span className="font-medium text-slate-700">{t.explorer.hours} </span>
+                  {getOpenHours(point, addressLocale)}
                 </p>
               )}
-              {getContact(point, locale) && (
-                <p className="mt-1 text-xs text-slate-600">{getContact(point, locale)}</p>
+              {getContact(point, addressLocale) && (
+                <p className="mt-1 text-xs text-slate-600">{getContact(point, addressLocale)}</p>
               )}
               {point.accessibilty_notes && (
                 <p className="mt-2 text-xs text-slate-500">{point.accessibilty_notes}</p>
@@ -338,7 +338,7 @@ export function RecyclingPointsExplorer() {
                   rel="noopener noreferrer"
                   className="link-brand text-xs font-semibold"
                 >
-                  OpenStreetMap
+                  {t.explorer.openStreetMap}
                 </a>
                 <a
                   href={googleMapsUrl(point.lat, point.lng)}
@@ -346,7 +346,7 @@ export function RecyclingPointsExplorer() {
                   rel="noopener noreferrer"
                   className="link-brand text-xs font-semibold"
                 >
-                  Google Maps
+                  {t.explorer.googleMaps}
                 </a>
                 <span className="text-slate-400">
                   {point.lat.toFixed(5)}, {point.lng.toFixed(5)}

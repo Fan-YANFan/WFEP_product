@@ -4,10 +4,26 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
+import type { Translations } from "@/lib/i18n";
+
+function translateAuthError(message: string | undefined, t: Translations): string {
+  const map: Record<string, keyof Translations["login"]["errors"]> = {
+    "Email and password are required.": "required",
+    "No account found. Please sign up first.": "notFound",
+    "Incorrect password.": "wrongPassword",
+    "Password must be at least 6 characters.": "shortPassword",
+    "An account with this email already exists. Please log in.": "exists",
+  };
+  if (!message) return t.login.errors.generic;
+  const key = map[message];
+  return key ? t.login.errors[key] : t.login.errors.generic;
+}
 
 export default function LoginPage() {
   const router = useRouter();
   const { member, ready, login, signup } = useAuth();
+  const { t } = useLanguage();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +47,7 @@ export default function LoginPage() {
     if (result.ok) {
       router.push("/account");
     } else {
-      setError(result.error ?? "Something went wrong.");
+      setError(translateAuthError(result.error, t));
     }
   }
 
@@ -43,18 +59,16 @@ export default function LoginPage() {
     <section className="gradient-mesh flex flex-1 items-center justify-center px-4 py-16 sm:px-6">
       <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-lg">
         <h1 className="font-display text-2xl font-semibold text-slate-900">
-          {mode === "login" ? "Log In" : "Sign Up"}
+          {mode === "login" ? t.login.loginTitle : t.login.signupTitle}
         </h1>
         <p className="mt-2 text-sm text-slate-600">
-          {mode === "login"
-            ? "Access your order history, saved recycling points, and event reminders."
-            : "Create a member account to track orders and save recycling locations."}
+          {mode === "login" ? t.login.loginDesc : t.login.signupDesc}
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <div>
             <label htmlFor="email" className="text-sm font-medium text-slate-700">
-              Email address
+              {t.login.email}
             </label>
             <input
               id="email"
@@ -69,7 +83,7 @@ export default function LoginPage() {
           </div>
           <div>
             <label htmlFor="password" className="text-sm font-medium text-slate-700">
-              Password
+              {t.login.password}
             </label>
             <input
               id="password"
@@ -92,14 +106,18 @@ export default function LoginPage() {
             disabled={submitting}
             className="btn-primary w-full rounded-full py-3 text-sm disabled:opacity-60"
           >
-            {submitting ? "Please wait…" : mode === "login" ? "Log In" : "Create account"}
+            {submitting
+              ? t.login.pleaseWait
+              : mode === "login"
+                ? t.login.submitLogin
+                : t.login.submitSignup}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-600">
           {mode === "login" ? (
             <>
-              Don&apos;t have an account?{" "}
+              {t.login.noAccount}{" "}
               <button
                 type="button"
                 onClick={() => {
@@ -108,12 +126,12 @@ export default function LoginPage() {
                 }}
                 className="link-brand font-semibold"
               >
-                Sign Up
+                {t.login.signupLink}
               </button>
             </>
           ) : (
             <>
-              Already a member?{" "}
+              {t.login.hasAccount}{" "}
               <button
                 type="button"
                 onClick={() => {
@@ -122,7 +140,7 @@ export default function LoginPage() {
                 }}
                 className="link-brand font-semibold"
               >
-                Log In
+                {t.login.loginLink}
               </button>
             </>
           )}
@@ -132,7 +150,7 @@ export default function LoginPage() {
           href="/"
           className="mt-4 block text-center text-sm font-medium text-slate-500 hover:text-slate-700"
         >
-          ← Back to home
+          {t.common.backToHome}
         </Link>
       </div>
     </section>

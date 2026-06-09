@@ -4,6 +4,7 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { CookieBanner } from "@/components/CookieBanner";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { CookieProvider } from "@/context/CookieContext";
@@ -37,17 +38,19 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${dmSans.variable} ${fraunces.variable} antialiased`}>
         <CookieProvider>
-          <AuthProvider>
-            <CartProvider>
-              <div className="flex min-h-screen flex-col">
-                <Header />
-                <main className="flex-1">{children}</main>
-                <Footer />
-              </div>
-              <CartDrawer />
-              <CookieBanner />
-            </CartProvider>
-          </AuthProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              <CartProvider>
+                <div className="flex min-h-screen flex-col">
+                  <Header />
+                  <main className="flex-1">{children}</main>
+                  <Footer />
+                </div>
+                <CartDrawer />
+                <CookieBanner />
+              </CartProvider>
+            </AuthProvider>
+          </LanguageProvider>
         </CookieProvider>
       </body>
     </html>

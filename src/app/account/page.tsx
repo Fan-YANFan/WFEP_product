@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { formatDistrictLabel } from "@/lib/csdi/display";
+import { useLanguage } from "@/context/LanguageContext";
+import { getDistrictLabel } from "@/lib/i18n/districts";
 
 export default function AccountPage() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function AccountPage() {
     addReminder,
     removeReminder,
   } = useAuth();
+  const { locale, t } = useLanguage();
 
   const [reminderTitle, setReminderTitle] = useState("");
   const [reminderDate, setReminderDate] = useState("");
@@ -50,10 +52,10 @@ export default function AccountPage() {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-brand-cyan-foreground">
-                Member area
+                {t.account.memberArea}
               </p>
               <h1 className="font-display mt-2 text-3xl font-semibold text-slate-900 sm:text-4xl">
-                Welcome back
+                {t.account.welcome}
               </h1>
               <p className="mt-2 text-slate-600">{member.email}</p>
             </div>
@@ -65,7 +67,7 @@ export default function AccountPage() {
               }}
               className="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
             >
-              Log out
+              {t.account.logout}
             </button>
           </div>
         </div>
@@ -73,23 +75,23 @@ export default function AccountPage() {
 
       <div className="mx-auto max-w-6xl space-y-12 px-4 py-12 sm:px-6">
         <section>
-          <h2 className="font-display text-xl font-semibold text-slate-900">Order history</h2>
-          <p className="mt-1 text-sm text-slate-600">Review your past purchases and delivery status.</p>
+          <h2 className="font-display text-xl font-semibold text-slate-900">{t.account.orderHistory}</h2>
+          <p className="mt-1 text-sm text-slate-600">{t.account.orderDesc}</p>
 
           {orders.length === 0 ? (
             <p className="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
-              No orders yet.
+              {t.account.noOrders}
             </p>
           ) : (
             <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
               <table className="w-full min-w-[480px] text-left text-sm">
                 <thead className="border-b border-slate-100 bg-slate-50/80 text-xs font-semibold uppercase tracking-wider text-slate-500">
                   <tr>
-                    <th className="px-5 py-3">Order</th>
-                    <th className="px-5 py-3">Date</th>
-                    <th className="px-5 py-3">Items</th>
-                    <th className="px-5 py-3">Total</th>
-                    <th className="px-5 py-3">Status</th>
+                    <th className="px-5 py-3">{t.account.orderCol}</th>
+                    <th className="px-5 py-3">{t.account.dateCol}</th>
+                    <th className="px-5 py-3">{t.account.itemsCol}</th>
+                    <th className="px-5 py-3">{t.account.totalCol}</th>
+                    <th className="px-5 py-3">{t.account.statusCol}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -114,19 +116,18 @@ export default function AccountPage() {
 
         <section>
           <h2 className="font-display text-xl font-semibold text-slate-900">
-            Saved recycling points
+            {t.account.savedPoints}
           </h2>
           <p className="mt-1 text-sm text-slate-600">
-            Bookmarks from the recycling finder.{" "}
+            {t.account.savedDesc}{" "}
             <Link href="/" className="link-brand font-semibold">
-              Browse points →
+              {t.account.browsePoints}
             </Link>
           </p>
 
           {bookmarks.length === 0 ? (
             <p className="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
-              No saved points yet. Browse recycling locations on the home page and bookmark your
-              favourites.
+              {t.account.noBookmarks}
             </p>
           ) : (
             <ul className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -138,7 +139,7 @@ export default function AccountPage() {
                   <p className="font-display font-semibold text-slate-900">{point.address}</p>
                   {point.district && (
                     <p className="mt-1 text-xs text-slate-500">
-                      {formatDistrictLabel(point.district)}
+                      {getDistrictLabel(point.district, locale)}
                     </p>
                   )}
                   {point.wasteTypes && (
@@ -149,7 +150,7 @@ export default function AccountPage() {
                     onClick={() => removeBookmark(point.cp_id)}
                     className="mt-4 text-xs font-semibold text-red-600 hover:text-red-800"
                   >
-                    Remove bookmark
+                    {t.account.removeBookmark}
                   </button>
                 </li>
               ))}
@@ -159,11 +160,9 @@ export default function AccountPage() {
 
         <section>
           <h2 className="font-display text-xl font-semibold text-slate-900">
-            Recycling event reminders
+            {t.account.reminders}
           </h2>
-          <p className="mt-1 text-sm text-slate-600">
-            Set reminders for community recycling drives, e-waste collection days, and other events.
-          </p>
+          <p className="mt-1 text-sm text-slate-600">{t.account.remindersDesc}</p>
 
           <form
             onSubmit={handleAddReminder}
@@ -172,20 +171,20 @@ export default function AccountPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <label htmlFor="event-title" className="text-sm font-medium text-slate-700">
-                  Event name
+                  {t.account.eventName}
                 </label>
                 <input
                   id="event-title"
                   required
                   value={reminderTitle}
                   onChange={(e) => setReminderTitle(e.target.value)}
-                  placeholder="e.g. Central district e-waste drive"
+                  placeholder={t.account.eventPlaceholder}
                   className="input-brand mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm"
                 />
               </div>
               <div>
                 <label htmlFor="event-date" className="text-sm font-medium text-slate-700">
-                  Date
+                  {t.account.date}
                 </label>
                 <input
                   id="event-date"
@@ -198,13 +197,13 @@ export default function AccountPage() {
               </div>
               <div>
                 <label htmlFor="event-notes" className="text-sm font-medium text-slate-700">
-                  Notes (optional)
+                  {t.account.notes}
                 </label>
                 <input
                   id="event-notes"
                   value={reminderNotes}
                   onChange={(e) => setReminderNotes(e.target.value)}
-                  placeholder="Location, time, what to bring…"
+                  placeholder={t.account.notesPlaceholder}
                   className="input-brand mt-1.5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm"
                 />
               </div>
@@ -213,13 +212,13 @@ export default function AccountPage() {
               type="submit"
               className="btn-primary mt-4 rounded-full px-6 py-2.5 text-sm"
             >
-              Add reminder
+              {t.account.addReminder}
             </button>
           </form>
 
           {reminders.length === 0 ? (
             <p className="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
-              No reminders set yet.
+              {t.account.noReminders}
             </p>
           ) : (
             <ul className="mt-6 space-y-3">
@@ -240,7 +239,7 @@ export default function AccountPage() {
                     onClick={() => removeReminder(reminder.id)}
                     className="text-xs font-semibold text-red-600 hover:text-red-800"
                   >
-                    Remove
+                    {t.common.remove}
                   </button>
                 </li>
               ))}

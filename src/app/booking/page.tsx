@@ -2,22 +2,20 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Weight, MapPin, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Calendar, CheckCircle2, MapPin, Weight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { formatMessage } from "@/lib/i18n";
 
-const HK_DISTRICTS = [
-  "Hong Kong Island (Central & Western, Wan Chai, Eastern, Southern)",
-  "Kowloon (Yau Tsim Mong, Sham Shui Po, Kowloon City, Wong Tai Sin, Kwun Tong)",
-  "New Territories (Kwai Tsing, Tsuen Wan, Tuen Mun, Yuen Long, North, Tai Po, Sha Tin, Sai Kung, Islands)"
-];
-
-const MATERIAL_TYPES = [
-  { id: "plastics", name: "Plastics", rate: 1.5 }, // HKD per kg
-  { id: "paper", name: "Paper/Cardboard", rate: 1.0 },
-  { id: "metals", name: "Metals (Aluminium/Steel)", rate: 2.5 },
-  { id: "ewaste", name: "E-Waste / Small Appliances", rate: 0.5 },
-];
+const MATERIAL_IDS = ["plastics", "paper", "metals", "ewaste"] as const;
+const MATERIAL_RATES: Record<(typeof MATERIAL_IDS)[number], number> = {
+  plastics: 1.5,
+  paper: 1.0,
+  metals: 2.5,
+  ewaste: 0.5,
+};
 
 export default function BookingPage() {
+  const { t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -25,36 +23,45 @@ export default function BookingPage() {
     district: "",
     address: "",
     date: "",
-    materialType: "plastics",
+    materialType: "plastics" as (typeof MATERIAL_IDS)[number],
     estimatedWeight: 5,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Connect your database logic or API routes here
     setSubmitted(true);
   };
 
-  const currentRate = MATERIAL_TYPES.find(m => m.id === formData.materialType)?.rate || 0;
+  const currentRate = MATERIAL_RATES[formData.materialType];
   const estimatedPayout = (formData.estimatedWeight * currentRate).toFixed(1);
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-slate-100 shadow-xl text-center">
-          <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 className="w-10 h-10" />
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+        <div className="w-full max-w-md rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-xl">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
+            <CheckCircle2 className="h-10 w-10" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Booking Confirmed!</h2>
-          <p className="text-slate-600 mb-6">
-            Thank you, <span className="font-semibold text-slate-800">{formData.name}</span>. Our logistics team will text you at <span className="font-semibold text-slate-800">{formData.phone}</span> to confirm your slot on {formData.date}.
+          <h2 className="mb-2 text-2xl font-bold text-slate-900">{t.booking.confirmed}</h2>
+          <p className="mb-6 text-slate-600">
+            {formatMessage(t.booking.confirmedBody, {
+              name: formData.name,
+              phone: formData.phone,
+              date: formData.date,
+            })}
           </p>
-          <div className="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100 text-left text-sm">
-            <p className="text-slate-500">Estimated Weight: <span className="text-slate-800 font-medium">{formData.estimatedWeight} kg</span></p>
-            <p className="text-slate-500">Estimated Cashback: <span className="text-green-600 font-bold">HK$ {estimatedPayout}</span></p>
+          <div className="mb-6 rounded-xl border border-slate-100 bg-slate-50 p-4 text-left text-sm">
+            <p className="text-slate-500">
+              {t.booking.estWeight}{" "}
+              <span className="font-medium text-slate-800">{formData.estimatedWeight} kg</span>
+            </p>
+            <p className="text-slate-500">
+              {t.booking.estCashback}{" "}
+              <span className="font-bold text-green-600">HK$ {estimatedPayout}</span>
+            </p>
           </div>
-          <Link href="/" className="inline-flex items-center gap-2 text-green-600 font-semibold hover:underline">
-            <ArrowLeft className="w-4 h-4" /> Back to Homepage
+          <Link href="/" className="inline-flex items-center gap-2 font-semibold text-green-600 hover:underline">
+            <ArrowLeft className="h-4 w-4" /> {t.booking.backHome}
           </Link>
         </div>
       </div>
@@ -62,139 +69,150 @@ export default function BookingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6">
-      <div className="max-w-2xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-800 font-medium mb-8 transition">
-          <ArrowLeft className="w-4 h-4" /> Back
+    <div className="min-h-screen bg-slate-50/50 px-4 py-12 sm:px-6">
+      <div className="mx-auto max-w-2xl">
+        <Link
+          href="/"
+          className="mb-8 inline-flex items-center gap-2 font-medium text-slate-500 transition hover:text-slate-800"
+        >
+          <ArrowLeft className="h-4 w-4" /> {t.booking.back}
         </Link>
 
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-6 sm:p-10 bg-gradient-to-r from-green-50 to-emerald-50/50 border-b border-slate-100">
-            <h1 className="text-3xl font-extrabold text-slate-900">Schedule a Pickup</h1>
-            <p className="text-slate-600 mt-2">Fill in your location details and estimate your recycle weight to complete your booking.</p>
+        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+          <div className="border-b border-slate-100 bg-gradient-to-r from-green-50 to-emerald-50/50 p-6 sm:p-10">
+            <h1 className="text-3xl font-extrabold text-slate-900">{t.booking.title}</h1>
+            <p className="mt-2 text-slate-600">{t.booking.subtitle}</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 sm:p-10 space-y-6">
-            {/* Contact Details */}
-            <div className="grid sm:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="space-y-6 p-6 sm:p-10">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
-                <input 
-                  type="text" 
-                  required 
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition"
+                <label className="mb-1 block text-sm font-medium text-slate-700">{t.booking.fullName}</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 transition focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                   value={formData.name}
-                  onChange={e => setFormData({...formData, name: e.target.value})}
-                  placeholder="Chan Tai Man"
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder={t.booking.namePlaceholder}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">WhatsApp / Phone Number</label>
-                <input 
-                  type="tel" 
-                  required 
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition"
+                <label className="mb-1 block text-sm font-medium text-slate-700">{t.booking.phone}</label>
+                <input
+                  type="tel"
+                  required
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 transition focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                   value={formData.phone}
-                  onChange={e => setFormData({...formData, phone: e.target.value})}
-                  placeholder="9123 4567"
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder={t.booking.phonePlaceholder}
                 />
               </div>
             </div>
 
-            {/* Address */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Region / District</label>
-              <select 
+              <label className="mb-1 block text-sm font-medium text-slate-700">{t.booking.region}</label>
+              <select
                 required
-                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 transition focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                 value={formData.district}
-                onChange={e => setFormData({...formData, district: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, district: e.target.value })}
               >
-                <option value="">Select your region</option>
-                {HK_DISTRICTS.map((dist, idx) => (
-                  <option key={idx} value={dist}>{dist}</option>
+                <option value="">{t.booking.selectRegion}</option>
+                {t.booking.regions.map((dist, idx) => (
+                  <option key={idx} value={dist}>
+                    {dist}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Full Street Address & Unit</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">{t.booking.address}</label>
               <div className="relative">
-                <MapPin className="absolute left-3.5 top-3.5 text-slate-400 w-4 h-4" />
-                <textarea 
-                  required 
+                <MapPin className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                <textarea
+                  required
                   rows={2}
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition resize-none"
+                  className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 transition focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                   value={formData.address}
-                  onChange={e => setFormData({...formData, address: e.target.value})}
-                  placeholder="Flat B, 12/F, Silver Tower, Nathan Road"
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  placeholder={t.booking.addressPlaceholder}
                 />
               </div>
             </div>
 
-            {/* Date & Estimation Grid */}
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Preferred Collection Date</label>
+                <label className="mb-1 block text-sm font-medium text-slate-700">{t.booking.date}</label>
                 <div className="relative">
-                  <Calendar className="absolute left-3.5 top-3.5 text-slate-400 w-4 h-4" />
-                  <input 
-                    type="date" 
-                    required 
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition"
+                  <Calendar className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                  <input
+                    type="date"
+                    required
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 transition focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                     value={formData.date}
-                    onChange={e => setFormData({...formData, date: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Primary Recycling Material</label>
-                <select 
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition"
+                <label className="mb-1 block text-sm font-medium text-slate-700">{t.booking.material}</label>
+                <select
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 transition focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                   value={formData.materialType}
-                  onChange={e => setFormData({...formData, materialType: e.target.value})}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      materialType: e.target.value as (typeof MATERIAL_IDS)[number],
+                    })
+                  }
                 >
-                  {MATERIAL_TYPES.map(m => (
-                    <option key={m.id} value={m.id}>{m.name} (HK$ {m.rate}/kg)</option>
+                  {MATERIAL_IDS.map((id) => (
+                    <option key={id} value={id}>
+                      {t.booking.materials[id]} (HK$ {MATERIAL_RATES[id]}/kg)
+                    </option>
                   ))}
                 </select>
               </div>
             </div>
 
-            {/* Weight Slider */}
-            <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
-              <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium text-slate-700 flex items-center gap-1.5">
-                  <Weight className="w-4 h-4 text-slate-500" /> Estimated Weight
+            <div className="rounded-2xl border border-slate-100 bg-slate-50 p-5">
+              <div className="mb-2 flex items-center justify-between">
+                <label className="flex items-center gap-1.5 text-sm font-medium text-slate-700">
+                  <Weight className="h-4 w-4 text-slate-500" /> {t.booking.weight}
                 </label>
                 <span className="text-lg font-bold text-slate-900">{formData.estimatedWeight} kg</span>
               </div>
-              <input 
-                type="range" 
-                min="2" 
-                max="100" 
-                className="w-full accent-green-600 cursor-pointer h-2 bg-slate-200 rounded-lg"
+              <input
+                type="range"
+                min="2"
+                max="100"
+                className="h-2 w-full cursor-pointer rounded-lg bg-slate-200 accent-green-600"
                 value={formData.estimatedWeight}
-                onChange={e => setFormData({...formData, estimatedWeight: parseInt(e.target.value)})}
+                onChange={(e) =>
+                  setFormData({ ...formData, estimatedWeight: parseInt(e.target.value, 10) })
+                }
               />
-              <div className="flex justify-between text-xs text-slate-400 mt-1">
-                <span>Min: 2kg</span>
-                <span>Max: 100kg+</span>
+              <div className="mt-1 flex justify-between text-xs text-slate-400">
+                <span>{t.booking.minWeight}</span>
+                <span>{t.booking.maxWeight}</span>
               </div>
 
-              {/* Dynamic Price Calculation Box */}
-              <div className="mt-4 pt-4 border-t border-slate-200/60 flex justify-between items-center">
-                <span className="text-xs text-slate-500 uppercase font-semibold tracking-wider">Est. Cash payout</span>
+              <div className="mt-4 flex items-center justify-between border-t border-slate-200/60 pt-4">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  {t.booking.estPayout}
+                </span>
                 <span className="text-2xl font-black text-green-600">HK$ {estimatedPayout}</span>
               </div>
             </div>
 
-            <button 
+            <button
               type="submit"
-              className="w-full py-4 bg-green-600 text-white rounded-xl font-bold text-lg hover:bg-green-700 shadow-md shadow-green-100 transition duration-150"
+              className="w-full rounded-xl bg-green-600 py-4 text-lg font-bold text-white shadow-md shadow-green-100 transition duration-150 hover:bg-green-700"
             >
-              Confirm Logistics Request
+              {t.booking.submit}
             </button>
           </form>
         </div>
